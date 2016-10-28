@@ -901,7 +901,7 @@ if [ "$enable_update" = true ] ; then
     echo "Your version of .bashrc (v${version}) is outdated, the latest \
 version is ${new_version}"
     echo "You might consider grabbing the latest version from http://co\
-defined.xyz/bashrc.txt"
+defined.xyz/bashrc/bashrc.txt"
   fi
 fi
 

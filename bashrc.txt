@@ -381,8 +381,6 @@ if [ "$enable_aliases" = true ] ; then
   alias ....='cd ../../..'
   alias .....='cd ../../../..'
 
-  ########################### NOT DOCUMENTED
-
   # Search command line history
   alias h="history | grep "
 
@@ -430,7 +428,6 @@ if [ "$enable_aliases" = true ] ; then
 
   # SHA1
   alias sha1='openssl sha1'
-  ########################### END NOT DOCUMENTED
 fi
 
 ##############################################################################

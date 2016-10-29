@@ -933,6 +933,12 @@ version is ${new_version}"
     echo "You might consider grabbing the latest version from http://co\
 defined.xyz/bashrc/bashrc.txt"
   fi
+  update_bashrc() {
+    if ask "Are you sure?  This downloads the script over HTTP."; then
+      mv -fv ~/.bashrc ~/.bashrc.old
+      wget http://codefined.xyz/bashrc/bashrc.txt -O ~/.bashrc
+    fi
+  }
 fi
 
 ##############################################################################

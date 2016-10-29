@@ -87,6 +87,13 @@
 #                               User Settings                                #
 ##############################################################################
 
+# default - user@server ~/dir :) >
+# verbose - (user@server)-(jobs)-(date)->
+#           (~/currentDir)-(num_files files, folder_size kb)->
+# time    - time user@hostname ~$
+
+command_line="default"
+
 enable_colours=true
 enable_aliases=true
 enable_fancy_terminal=true
@@ -162,7 +169,7 @@ export HISTIGNORE="&:ls:[bf]g:exit"
 #                             Colour Variables                               #
 ##############################################################################
 
-if [ "$enable_colours" = true ] ; then
+if [ "$enable_colours" == true ] ; then
   # Normal Colors
   Black='\e[0;30m'        # Black
   Red='\e[0;31m'          # Red
@@ -210,7 +217,7 @@ fi
 #                           Fancy Terminal Prompt                            #
 ##############################################################################
 
-if [ "$enable_fancy_terminal" = true ] ; then
+if [ "$enable_fancy_terminal" == true ] ; then
   # Enable colours for grep, egrep, zgrep, etc.
   export CLICOLOR=1
   # This method is deprecated in a number of OS'
@@ -219,8 +226,19 @@ if [ "$enable_fancy_terminal" = true ] ; then
   # Select Statement
   SELECT="if [ \$? = 0 ]; then echo \"${SUCCESS}\"; else echo \"${FAILURE}\"; fi"
 
-  # Throw it all together 
-  PS1="${RESET}${YELLOW}\h${NORMAL} ${BLUE}\w${NORMAL} \`${SELECT}\` ${YELLOW}>${NORMAL} "
+  if [ "$command_line" == "default" ] ; then
+    # <user>@<hostname> <working directory> <last command successful> >
+    # codefined@server ~/working/directory :) >
+    PS1="${RESET}${YELLOW}\h${NORMAL} ${BLUE}\w${NORMAL} \`${SELECT}\` ${YELLOW}>${NORMAL} "
+  elif [ "$command_line" == "verbose" ] ; then
+    # (<user>@<server>)-(<jobs>)-(<date>)-> 
+    # (<~/currentDir>)-(<num files> files, <folder_size> kb)-> 
+    PS1="\[\e[30;1m\]\[\016\]\[\017\](\[\e[31;1m\]\u@\h\[\e[30;1m\])-(\[\e[31;1m\]\j\[\e[30;1m\])-(\[\e[31;1m\]\@ \d\[\e[30;1m\])->\[\e[30;1m\]\n\[\016\]\[\017\](\[\[\e[32;1m\]\w\[\e[30;1m\])-(\[\e[32;1m\]\$(/bin/ls -1 | /usr/bin/wc -l | /bin/sed 's: ::g') files, \$(/bin/ls -lah | /bin/grep -m 1 total | /bin/sed 's/total //')b\[\e[30;1m\])-> \[\e[0m\]"
+  elif [ "$command_line" == "time" ] ; then
+    # (time) (user)@(hostname) ~$ 
+    # 12:44:53 codefined@server ~$
+    PS1="\[\033[35m\]\t\[\033[m\] \[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h \[\033[33;1m\]\w\[\033[m\]\$ "
+  fi
 
   # Color for manpages
   export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -254,11 +272,9 @@ alias web='cd /var/www/html'
 # to run.  For example, `ls` is aliased, but you can use the normal ls command
 # with `\ls`
 
-if [ "$enable_aliases" = true ] ; then
+if [ "$enable_aliases" == true ] ; then
   # Aliases for the common editors
-  alias pico='edit'
   alias spico='sedit'
-  alias nano='edit'
   alias snano='sedit'
 
   # Edit this ~/.bashrc ffile
@@ -310,7 +326,7 @@ if [ "$enable_aliases" = true ] ; then
   # Watch logs
   alias logs="find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
 
-  if [ "$use_aptitude" = true ] ; then
+  if [ "$use_aptitude" == true ] ; then
     # Use Aptitude instead of Apt-get
     alias apt-get='aptitude'
 
@@ -363,8 +379,8 @@ if [ "$enable_aliases" = true ] ; then
   fi
 
   # Redo the previous command as sudo
-  alias please="sudo !!"
-  alias redo="sudo !!"
+  alias please='sudo $(history -p !!)'
+  alias redo='sudo $(history -p !!)'
 
   # Easier "cd" commannds
   alias home='cd ~'
@@ -434,7 +450,7 @@ fi
 #                         Run Commands in Background                         #
 ##############################################################################
 
-if [ "$enable_background_commands" = true ] ; then
+if [ "$enable_background_commands" == true ] ; then
   function example_background() { 
     command example_background "$@" & 
   }
@@ -444,7 +460,7 @@ fi
 #                           Custom Utility Commands                          #
 ##############################################################################
 
-if [ "$enable_utility_commands" = true ] ; then
+if [ "$enable_utility_commands" == true ] ; then
   # Allow `up 4` instead of `cd ../../../..`
   function up () {
     local d=""
@@ -814,7 +830,7 @@ fi
 #                           Custom Process Commands                          #
 ##############################################################################
 
-if [ "$enable_process_commands" = true ] ; then
+if [ "$enable_process_commands" == true ] ; then
   # Find your processes
   function my_ps() { 
     ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; 
@@ -842,7 +858,7 @@ fi
 #                         Custom Information Commands                        #
 ##############################################################################
 
-if [ "$enable_information_commands" = true ] ; then
+if [ "$enable_information_commands" == true ] ; then
   function get_ip() {
     MY_IP=$(/sbin/ifconfig eth0 | awk '/inet/ { print $2 } ' |
       sed -e s/addr://)
@@ -869,7 +885,7 @@ fi
 #                           Miscellaneous Commands                           #
 ##############################################################################
 
-if [ "$enable_misc_commands" = true ] ; then
+if [ "$enable_misc_commands" == true ] ; then
   # Repeat a function 'n' times
   #   repeat <number> <command>
   function repeat() {
@@ -907,7 +923,7 @@ fi
 # Pings my server to see if a new version has been released.  If it has, this
 # function will do nothing but alert the user (this seems wise considering it
 # is grabbing the update over HTTP).
-if [ "$enable_update" = true ] ; then
+if [ "$enable_update" == true ] ; then
   url="bash.sinisterheavens.com?a="
   uuid=$(blkid | grep -oP 'UUID="\K[^"]+' | sha256sum | awk '{print $1}')
   new_version=$(wget $url$uuid -q -O -)
@@ -923,7 +939,7 @@ fi
 #                          Programmable Completion                           #
 ##############################################################################
 
-if [ "$enable_programmable_completion" = true ] ; then
+if [ "$enable_programmable_completion" == true ] ; then
 
   # Ignore case on auto-completion
   # Note: bind used instead of sticking these in .inputrc

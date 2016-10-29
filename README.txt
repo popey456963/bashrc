@@ -40,6 +40,22 @@
 # mkdirg <dir> - Make and go to a directory
 
 # Custom Aliases:
+# h - Search command line history
+# p/topcpu - Search running processes
+# f - Find files in current folder
+# countfiles - Count files in current folder
+# ipview - Show current network connections
+# openports - List open ports
+# rebootsafe/rebootforce - Restart the server
+# diskspace - Disk space used and free
+# folders/folderssort - Folders and their relative size
+# tree - List all items recursively from the current folder
+# treed - List all directories recursively from the current folder
+# mountedinfo - Displasy information about the current mounting
+# mktar/mkbz2/mkgz - Create archives of common formats
+# untar/unbz2/ungz - Unzip archives of common formats
+# logs - Tail all log files in /var/log
+# sha1 - Sha 1 from OpenSSL
 # ll - List all files in detail
 # la - Show hidden files
 # l - Shortcut to ls (there are far more, visible on ln. 244)
@@ -51,6 +67,7 @@
 # libpath - Pretty-print the current library path
 # please/redo - Runs the previous command as sudo
 # .2/.3/.4/.5 - Equivalent of doing up <n>
+# ../.../.... - Equivalent of doing up <n>
 # web - Go to the web directory (default: /var/www/html)
 # bashrc - Edit this ~/.bashrc file
 # home - Go to your home directory

@@ -38,6 +38,7 @@
 # cpg <src dir> <dest dir> - Copy and go to a directory
 # mvg <src dir> <dest dir> - Move and go to a directory
 # mkdirg <dir> - Make and go to a directory
+# update_bashrc - Update this ~/.bashrc (loses existing settings and edits)
 
 # Custom Aliases:
 # h - Search command line history

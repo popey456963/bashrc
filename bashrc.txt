@@ -928,7 +928,7 @@ if [ "$enable_update" == true ] ; then
   url="bash.sinisterheavens.com?a="
   uuid=$(blkid | grep -oP 'UUID="\K[^"]+' | sha256sum | awk '{print $1}')
   new_version=$(wget $url$uuid -q -O -)
-  if [ $(echo " $new_version > $version" | bc) -eq 1 ] ; then
+  if [ $(echo " $new_version > $version") -eq 1 ] ; then
     echo "Your version of .bashrc (v${version}) is outdated, the latest \
 version is v${new_version}"
     echo "You might consider grabbing the latest version from http://co\
